@@ -39,7 +39,7 @@ module.exports.all = function (test, common, endpoint) {
      // 'keywords': ['entry', 'test', 'data', 'dathub']
     };
 
-    common.getRegistry(t, function (err, api, done) {
+    common.getServer(t, function (err, api, done) {
       request({
         method: 'OPTIONS',
         uri: 'http://localhost:' + api.port + '/api/' + endpoint,

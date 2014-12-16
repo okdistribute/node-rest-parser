@@ -12,7 +12,7 @@ module.exports = function() {
 
 
   common.testGET = function (t, path, data, cb) {
-    this.getRegistry(t, function(err, api, done) {
+    this.getServer(t, function(err, api, done) {
       params = {
         method: 'GET',
         uri: 'http://localhost:' + api.port + path
@@ -25,7 +25,7 @@ module.exports = function() {
   };
 
   common.testPOST = function (t, path, data, cb) {
-    this.getRegistry(t, function(err, api, done) {
+    this.getServer(t, function(err, api, done) {
       params = {
         method: 'POST',
         uri: 'http://localhost:' + api.port + path,
@@ -39,10 +39,8 @@ module.exports = function() {
     });
   };
 
-  common.getRegistry = function (t, cb) {
-
-    var dbPath = config.DB;
-    var api = Server(dbPath);
+  common.getServer = function (t, cb) {
+    var api = Server();
 
     api.server.listen(api.port, function() {
       console.log('listening on port', api.port);
@@ -53,11 +51,8 @@ module.exports = function() {
       setTimeout(destroy, 100) // fixes weird test errors on travis-ci
 
       function destroy() {
-        rimraf(dbPath, function () {
-          api.server.close()
-          api.models.db.close()
-          t.end()
-        });
+        api.server.close()
+        t.end()
       }
     }
   };

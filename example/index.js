@@ -4,8 +4,8 @@ var Router = require('routes-router');
 var QuickRestModel = require('..')
 var createModels = require('./models');
 
-function Server (dbPath) {
-  var models = createModels(dbPath);
+function Server () {
+  var models = createModels('owner_id');
 
   var router = Router();
   // Wire up API endpoints
