@@ -1,11 +1,11 @@
-quickrest-orm
+quickrest
 =============
 
 A simple plug and play REST wrapper for any ORM.
 
-[![NPM](https://nodei.co/npm/quickrest-orm.png?compact=true)](https://nodei.co/npm/quickrest-orm/)
+[![NPM](https://nodei.co/npm/quickrest.png?compact=true)](https://nodei.co/npm/quickrest/)
 
-[![build status](https://secure.travis-ci.org/karissa/quickrest-orm.png)](http://travis-ci.org/karissa/quickrest-orm)
+[![build status](https://secure.travis-ci.org/karissa/quickrest.png)](http://travis-ci.org/karissa/quickrest)
 
 
 A REST client can call any of the basic REST api calls, implemented according to [this spec](http://www.restapitutorial.com/lessons/httpmethods.html). It will parse the request object and call the corresponding database object's method.
@@ -24,7 +24,7 @@ DELETE /model/id
 This module is installed via npm:
 
 ```bash
-$ npm install quickrest-orm
+$ npm install quickrest
 ```
 
 ## Usage
@@ -88,27 +88,26 @@ Book.prototype.all = function (cb) {
 
 ### Create a server
 
-You can then wrap your new Book in a ```QuickRestModel```. It gives you the method ```dispatch``` which is used in the below example:
+You can then dispatch the book to ```QuickRest```.
 
 ```js
-var QuickRestModel = require('quickrest-orm')
+var QuickRest = require('quickrest')
 var Book = require('./book.js')
 
 // make the book model
 var bookDB = new Book()
-var bookModel = QuickRestModel(bookDB)
 
 // Wire up API endpoints
 router.addRoute({
   GET: '/api/book/:id', function(req, res, opts) {
     var id = parseInt(opts.params.id) || opts.params.id
-    bookModel.handlers.get(req, res, id, function (err, data) {
+    QuickRest.handlers.get(bookDB, req, res, id, function (err, data) {
       res.end(JSON.stringify(data))
     })
   }),
   POST: '/api/book/:id', function(req, res, opts) {
     var id = parseInt(opts.params.id) || opts.params.id
-    bookModel.handlers.post(req, res, id, function (err, data) {
+    QuickRest.handlers.post(bookDB, req, res, id, function (err, data) {
       res.end(JSON.stringify(data))
     })
   })

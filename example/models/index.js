@@ -1,6 +1,5 @@
 var debug = require('debug')('models');
 
-var QuickRestModel = require('../..')
 var Simple = require('./simple.js')
 
 module.exports = function(dbPath) {
@@ -10,7 +9,7 @@ module.exports = function(dbPath) {
 
   return {
     db: leveldb.db, // for closing the handler on server shutdown
-    simple: QuickRestModel(simple),
-    level: QuickRestModel(leveldb.Level)
+    simple: simple,
+    level: leveldb.Level
   };
 };
