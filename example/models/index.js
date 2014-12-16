@@ -1,7 +1,5 @@
 var debug = require('debug')('models');
 
-var Simple = require('./simple.js')
-
 module.exports = function(keyField) {
   var simple = new Simple(keyField)
 
