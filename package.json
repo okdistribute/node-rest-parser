@@ -1,25 +1,46 @@
 {
-  "name": "quickrest-orm",
-  "version": "1.0.0",
-  "description": "A simple plug and play REST wrapper for any ORM.",
+  "name": "level-restful",
+  "version": "1.0.7",
+  "description": "an easy plug-n-play REST wrapper for leveldb",
   "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
-    "test": "npm test"
+    "test": "node test/run.js | tap-spec"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/karissa/quickrest-orm.git"
+    "url": "https://github.com/karissa/level-restful.git"
   },
   "keywords": [
-    "rest",
-    "wrapper",
     "orm",
-    "http"
+    "rest",
+    "restful",
+    "api",
+    "models"
   ],
   "author": "Karissa McKelvey <karissa@karissamck.com> (http://karissamck.com/)",
-  "license": "bsd",
+  "license": "BSD",
   "bugs": {
-    "url": "https://github.com/karissa/quickrest-orm/issues"
+    "url": "https://github.com/karissa/level-restful/issues"
   },
-  "homepage": "https://github.com/karissa/quickrest-orm"
+  "homepage": "https://github.com/karissa/level-restful",
+  "dependencies": {
+    "body": "^4.5.0",
+    "debug": "^2.1.0"
+  },
+  "devDependencies": {
+    "bytewise": "^0.7.1",
+    "grunt-complexity": "^0.2.0",
+    "level-orm": "^2.0.0",
+    "level-prebuilt": "^0.18.0-2",
+    "monotonic-timestamp": "0.0.9",
+    "request": "^2.51.0",
+    "rimraf": "^2.2.8",
+    "routes-router": "^4.1.1",
+    "run-series": "^1.0.2",
+    "tap-spec": "^2.1.1",
+    "tape": "^3.0.1"
+  }
 }
