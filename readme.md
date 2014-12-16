@@ -27,11 +27,11 @@ This module is installed via npm:
 $ npm install quickrest
 ```
 
-## Usage
+# Usage
 
 You need to create an object (ORM) that has the methods ```.post```, ```.get```, ```.put```, ```.delete```, and ```.all```
 
-### Create a server
+## Create a server
 
 You can then dispatch the book to ```QuickRest```.
 
@@ -110,7 +110,7 @@ Book.prototype.all = function (cb) {
 
 ```
 
-### Control
+# Advanced
 
 If you want to have control over the individual routes (say, to expose only one or two, or perhaps require authentication before) you can do that by using the underlying handler methods on ```QuickRest``` like so:
 
@@ -148,10 +148,7 @@ server.listen(8000)
 ```
 
 
-### Create a server
-
-
-### Examples
+# Examples
 
 Create a new book
 
