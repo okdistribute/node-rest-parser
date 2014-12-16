@@ -100,7 +100,8 @@ var bookModel = QuickRestModel(bookDB)
 
 // Wire up API endpoints
 router.addRoute({
-  'GET': '/api/book/id', function(req, res, id) {
+  'GET': '/api/book/id', function(req, res, opts) {
+    var id = parseInt(opts.params.id) || opts.params.id
     bookModel.handlers.get(req, res, id, function (err, data) {
       res.end(JSON.stringify(data))
     })
