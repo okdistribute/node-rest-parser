@@ -2,7 +2,7 @@ var jsonBody = require('body/json');
 var url = require('url')
 var debug = require('debug')('restful');
 
-var QuickRestModel = {}
+var QuickRest = {}
 
 /*
 Parameters
@@ -22,21 +22,21 @@ the model object should have the following method signature:
  -- returns the given row with id value
 */
 
-QuickRestModel.dispatch = function (model, req, res, id, cb) {
+QuickRest.dispatch = function (model, req, res, id, cb) {
   var self = this
   var method = req.method.toLowerCase();
   switch (method) {
     case 'post':
-      QuickRestModel.handlers.post(model, req, res, cb);
+      QuickRest.handlers.post(model, req, res, cb);
       break;
     case 'get':
-      QuickRestModel.handlers.get(model, req, res, id, cb);
+      QuickRest.handlers.get(model, req, res, id, cb);
       break;
     case 'put':
-      QuickRestModel.handlers.put(model, req, res, id, cb);
+      QuickRest.handlers.put(model, req, res, id, cb);
       break;
     case 'delete':
-      QuickRestModel.handlers.delete(model, req, res, id, cb);
+      QuickRest.handlers.delete(model, req, res, id, cb);
       break;
     default:
       cb('method must be one of post put get or delete')
@@ -44,7 +44,7 @@ QuickRestModel.dispatch = function (model, req, res, id, cb) {
   }
 }
 
-QuickRestModel.getBodyData = function (req, res, cb) {
+QuickRest.getBodyData = function (req, res, cb) {
   var self = this;
   var data = {};
   jsonBody(req, res, function (err, data) {
@@ -56,11 +56,11 @@ QuickRestModel.getBodyData = function (req, res, cb) {
   });
 }
 
-QuickRestModel.handlers = {};
+QuickRest.handlers = {};
 
-QuickRestModel.handlers.post = function (model, req, res, cb) {
+QuickRest.handlers.post = function (model, req, res, cb) {
   var self = this;
-  QuickRestModel.getBodyData(req, res, function(err, data) {
+  QuickRest.getBodyData(req, res, function(err, data) {
     if (err || !data) {
       return cb(err)
     }
@@ -69,10 +69,10 @@ QuickRestModel.handlers.post = function (model, req, res, cb) {
   });
 };
 
-QuickRestModel.handlers.put = function (model, req, res, id, cb) {
+QuickRest.handlers.put = function (model, req, res, id, cb) {
   var self = this;
   if (!id) return cb('need an id to put', false);
-  QuickRestModel.getBodyData(req, res, function (err, data) {
+  QuickRest.getBodyData(req, res, function (err, data) {
     if (err || !data) {
       return cb(err)
     }
@@ -81,14 +81,14 @@ QuickRestModel.handlers.put = function (model, req, res, id, cb) {
   });
 };
 
-QuickRestModel.handlers.delete = function (model, req, res, id, cb) {
+QuickRest.handlers.delete = function (model, req, res, id, cb) {
   var self = this
   if (!id) return cb('need an id to delete', false);
   debug('deleting ', id);
   model.delete(id, cb);
 };
 
-QuickRestModel.handlers.get = function (model, req, res, id, cb) {
+QuickRest.handlers.get = function (model, req, res, id, cb) {
   // cb = function (err, data)
   var self = this
   if (!id) {
@@ -97,7 +97,7 @@ QuickRestModel.handlers.get = function (model, req, res, id, cb) {
 
     if (Object.keys(qs).length > 0) {
       debug('looking up qs', qs)
-      model.get(qs, cb);
+      model.query(qs, cb);
     }
     else {
       debug('returning all values')
@@ -111,4 +111,4 @@ QuickRestModel.handlers.get = function (model, req, res, id, cb) {
 };
 
 
-module.exports = QuickRestModel
+module.exports = QuickRest
