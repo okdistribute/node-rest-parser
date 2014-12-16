@@ -98,6 +98,30 @@ var Book = require('./book.js')
 var bookDB = new Book()
 
 // Wire up API endpoints
+router.addRoute('/api/book/:id?', function(req, res, opts) {
+    var id = parseInt(opts.params.id) || opts.params.id
+    QuickRest.dispatch(bookDB, req, res, id, function (err, data) {
+      res.end(JSON.stringify(data))
+    })
+  })
+})
+
+var server = http.createServer(router)''
+server.listen(8000)''
+```
+
+### Control
+
+If you want to have control over the individual routes (say, to expose only one or two, or perhaps require authentication before) you can do that by using the underlying handler methods on ```QuickRest``` like so:
+
+```js
+var QuickRest = require('quickrest')
+var Book = require('./book.js')
+
+// make the book model
+var bookDB = new Book()
+
+// Wire up API endpoints
 router.addRoute({
   GET: '/api/book/:id', function(req, res, opts) {
     var id = parseInt(opts.params.id) || opts.params.id
@@ -107,6 +131,12 @@ router.addRoute({
   }),
   POST: '/api/book/:id', function(req, res, opts) {
     var id = parseInt(opts.params.id) || opts.params.id
+    if (!req.userid) {
+      res.statusCode = 401
+      res.end('Unauthorized!')
+      return
+    }
+
     QuickRest.handlers.post(bookDB, req, res, id, function (err, data) {
       res.end(JSON.stringify(data))
     })
