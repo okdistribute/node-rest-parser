@@ -1,6 +1,6 @@
 {
   "name": "quickrest",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "an easy plug-n-play REST wrapper for any ORM",
   "main": "index.js",
   "directories": {
