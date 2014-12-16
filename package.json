@@ -1,0 +1,25 @@
+{
+  "name": "quickrest-orm",
+  "version": "1.0.0",
+  "description": "A simple plug and play REST wrapper for any ORM.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/karissa/quickrest-orm.git"
+  },
+  "keywords": [
+    "rest",
+    "wrapper",
+    "orm",
+    "http"
+  ],
+  "author": "Karissa McKelvey <karissa@karissamck.com> (http://karissamck.com/)",
+  "license": "bsd",
+  "bugs": {
+    "url": "https://github.com/karissa/quickrest-orm/issues"
+  },
+  "homepage": "https://github.com/karissa/quickrest-orm"
+}
