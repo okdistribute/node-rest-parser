@@ -3,9 +3,9 @@ quickrest-orm
 
 A simple plug and play REST wrapper for any ORM.
 
-[![NPM](https://nodei.co/npm/level-restful.png?compact=true)](https://nodei.co/npm/level-restful/)
+[![NPM](https://nodei.co/npm/quickrest-orm.png?compact=true)](https://nodei.co/npm/quickrest-orm/)
 
-[![build status](https://secure.travis-ci.org/karissa/level-restful.png)](http://travis-ci.org/karissa/level-restful)
+[![build status](https://secure.travis-ci.org/karissa/quickrest-orm.png)](http://travis-ci.org/karissa/quickrest-orm)
 
 
 A REST client can call any of the basic REST api calls, implemented according to [this spec](http://www.restapitutorial.com/lessons/httpmethods.html). It will parse the request object and call the corresponding database object's method.
