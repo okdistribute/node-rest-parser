@@ -99,14 +99,11 @@ var bookDB = new Book()
 var bookModel = QuickRestModel(bookDB)
 
 // Wire up API endpoints
-router.addRoute('/api/book/id?', function(req, res) {
-
-  var id = ... // get id here
-
-  bookModel.dispatch(req, res, id, function (err, data) {
-
-    // data will be whatever you return from your model by the appropriate REST method call
-
+router.addRoute({
+  'GET': '/api/book/id', function(req, res, id) {
+    bookModel.handlers.get(req, res, id, function (err, data) {
+      res.end(JSON.stringify(data))
+    })
   })
 })
 
