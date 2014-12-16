@@ -33,7 +33,7 @@ You need to create an object (ORM) that has the methods ```.post```, ```.get```,
 
 ## Create a server
 
-You can then dispatch the book to ```QuickRest```.
+Assuming Book fully implements this API, you can see how we dispatch requests automatically using ```QuickRest```.
 
 ```js
 var QuickRest = require('quickrest')
@@ -110,9 +110,9 @@ Book.prototype.all = function (cb) {
 
 ```
 
-# Advanced
+# Advanced: auth, custom routes
 
-If you want to have control over the individual routes (say, to expose only one or two, or perhaps require authentication before) you can do that by using the underlying handler methods on ```QuickRest``` like so:
+Sometimes, you want control over the individual routes to expose only a subset, to require authentication, or some other query logic. It's easy to do with QuickRest -- just use the underlying handler methods:
 
 ```js
 var QuickRest = require('quickrest')
@@ -146,6 +146,25 @@ router.addRoute({
 var server = http.createServer(router)
 server.listen(8000)
 ```
+
+# API
+
+#### QuickRest#dispatch(model, req, res, id, cb)
+This uses the ```req.method``` to dispatch appropriately to one of the following methods.
+
+#### QuickRest#handlers.get(model, req, res, id, cb)
+
+#### QuickRest#handlers.post(model, req, res, cb)
+Parses the request body using ```getBodyData``` and passes it to the underlying ```model.post``` method. Does *not* take an id -- it is assumed that the id will be generated upon creation or otherwise will be handled by the model.
+
+#### QuickRest#handlers.put(model, req, res, id, cb)
+Parses the request body using ```getBodyData``` and passes it to the underlying ```model.put``` method
+
+#### QuickRest#handlers.delete(model, req, res, id, cb)
+
+#### QuickRest#getBodyData
+Parses the request body using ```jsonBody```
+
 
 
 # Examples
