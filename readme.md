@@ -1,7 +1,7 @@
 quickrest
 =============
 
-A simple plug and play REST wrapper for any ORM.
+A simple requset parser that enforces REST style for any backend. Simply implement the required methods and you're off.
 
 [![NPM](https://nodei.co/npm/quickrest.png?compact=true)](https://nodei.co/npm/quickrest/)
 
