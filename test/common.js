@@ -2,7 +2,6 @@ var http = require('http');
 var path = require('path');
 var debug = require('debug')('test-common');
 var request = require('request').defaults({json: true});
-var rimraf = require('rimraf');
 
 var config = require('../example/config.js');
 var Server = require('../example');
