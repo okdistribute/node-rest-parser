@@ -12,7 +12,6 @@ var testFiles = [
 ];
 
 var models = [
-  'level',
   'simple'
 ];
 
