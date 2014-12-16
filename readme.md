@@ -31,7 +31,31 @@ $ npm install quickrest
 
 You need to create an object (ORM) that has the methods ```.post```, ```.get```, ```.put```, ```.delete```, and ```.all```
 
-### Basic example
+### Create a server
+
+You can then dispatch the book to ```QuickRest```.
+
+```js
+var QuickRest = require('quickrest')
+var Book = require('./book.js')
+
+// make the book model
+var bookDB = new Book()
+
+// Wire up API endpoints
+router.addRoute('/api/book/:id?', function(req, res, opts) {
+    var id = parseInt(opts.params.id) || opts.params.id
+    QuickRest.dispatch(bookDB, req, res, id, function (err, data) {
+      res.end(JSON.stringify(data))
+    })
+  })
+})
+
+var server = http.createServer(router)
+server.listen(8000)
+```
+
+Example ORM object that uses simple in-memory dictionaries for application storage.
 
 ```js
 function Book() {
@@ -86,30 +110,6 @@ Book.prototype.all = function (cb) {
 
 ```
 
-### Create a server
-
-You can then dispatch the book to ```QuickRest```.
-
-```js
-var QuickRest = require('quickrest')
-var Book = require('./book.js')
-
-// make the book model
-var bookDB = new Book()
-
-// Wire up API endpoints
-router.addRoute('/api/book/:id?', function(req, res, opts) {
-    var id = parseInt(opts.params.id) || opts.params.id
-    QuickRest.dispatch(bookDB, req, res, id, function (err, data) {
-      res.end(JSON.stringify(data))
-    })
-  })
-})
-
-var server = http.createServer(router)''
-server.listen(8000)''
-```
-
 ### Control
 
 If you want to have control over the individual routes (say, to expose only one or two, or perhaps require authentication before) you can do that by using the underlying handler methods on ```QuickRest``` like so:
@@ -143,8 +143,8 @@ router.addRoute({
   })
 })
 
-var server = http.createServer(router)''
-server.listen(8000)''
+var server = http.createServer(router)
+server.listen(8000)
 ```
 
 
