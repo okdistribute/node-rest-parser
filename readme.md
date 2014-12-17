@@ -1,15 +1,13 @@
 rest-parser
 =============
 
-A simple requset parser that enforces REST style for any backend. Simply implement the required methods and you're off.
+A simple requset parser that enforces REST style for any backend. Simply implement the required methods for the underlying database model.
 
 [![NPM](https://nodei.co/npm/rest-parser.png?compact=true)](https://nodei.co/npm/rest-parser/)
 
 [![build status](https://secure.travis-ci.org/karissa/node-rest-parser.png)](http://travis-ci.org/karissa/node-rest-parser)
 
-
-A REST client can call any of the basic REST api calls, implemented according to [this spec](http://www.restapitutorial.com/lessons/httpmethods.html). It will parse the request object and call the corresponding database object's method.
-
+This makes it easy to dispatch a given request to a particular undelying model. Any of the following routes implemented according to [this spec](http://www.restapitutorial.com/lessons/httpmethods.html) will be made available:
 
 ```
 GET /model
