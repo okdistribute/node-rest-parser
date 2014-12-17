@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/karissa/rest-parser.git"
+    "url": "https://github.com/karissa/node-rest-parser.git"
   },
   "keywords": [
     "orm",
@@ -23,9 +23,9 @@
   "author": "Karissa McKelvey <karissa@karissamck.com> (http://karissamck.com/)",
   "license": "BSD",
   "bugs": {
-    "url": "https://github.com/karissa/rest-parser/issues"
+    "url": "https://github.com/karissa/node-rest-parser/issues"
   },
-  "homepage": "https://github.com/karissa/rest-parser",
+  "homepage": "https://github.com/karissa/node-rest-parser",
   "dependencies": {
     "body": "^4.5.0",
     "debug": "^2.1.0"
