@@ -1,11 +1,11 @@
-quickrest
+rest-parser
 =============
 
 A simple requset parser that enforces REST style for any backend. Simply implement the required methods and you're off.
 
-[![NPM](https://nodei.co/npm/quickrest.png?compact=true)](https://nodei.co/npm/quickrest/)
+[![NPM](https://nodei.co/npm/rest-parser.png?compact=true)](https://nodei.co/npm/rest-parser/)
 
-[![build status](https://secure.travis-ci.org/karissa/quickrest.png)](http://travis-ci.org/karissa/quickrest)
+[![build status](https://secure.travis-ci.org/karissa/rest-parser.png)](http://travis-ci.org/karissa/rest-parser)
 
 
 A REST client can call any of the basic REST api calls, implemented according to [this spec](http://www.restapitutorial.com/lessons/httpmethods.html). It will parse the request object and call the corresponding database object's method.
@@ -24,7 +24,7 @@ DELETE /model/id
 This module is installed via npm:
 
 ```bash
-$ npm install quickrest
+$ npm install rest-parser
 ```
 
 # Usage
@@ -33,10 +33,10 @@ You need to create an object (ORM) that has the methods ```.post```, ```.get```,
 
 ## Create a server
 
-Assuming Book fully implements this API, you can see how we dispatch requests automatically using ```QuickRest```.
+Assuming Book fully implements this API, you can see how we dispatch requests automatically using ```rest-parser```.
 
 ```js
-var QuickRest = require('quickrest')
+var RestParser = require('rest-parser')
 var Book = require('./book.js')
 
 // make the book model
@@ -45,7 +45,7 @@ var bookDB = new Book()
 // Wire up API endpoints
 router.addRoute('/api/book/:id?', function(req, res, opts) {
     var id = parseInt(opts.params.id) || opts.params.id
-    QuickRest.dispatch(bookDB, req, res, id, function (err, data) {
+    RestParser.dispatch(bookDB, req, res, id, function (err, data) {
       res.end(JSON.stringify(data))
     })
   })
@@ -112,10 +112,10 @@ Book.prototype.all = function (cb) {
 
 # Advanced: auth, custom routes
 
-Sometimes, you want control over the individual routes to expose only a subset, to require authentication, or some other query logic. It's easy to do with QuickRest -- just use the underlying handler methods:
+Sometimes, you want control over the individual routes to expose only a subset, to require authentication, or some other query logic. It's easy to do with rest-parser -- just use the underlying handler methods:
 
 ```js
-var QuickRest = require('quickrest')
+var RestParser = require('rest-parser')
 var Book = require('./book.js')
 
 // make the book model
@@ -125,7 +125,7 @@ var bookDB = new Book()
 router.addRoute({
   GET: '/api/book/:id', function(req, res, opts) {
     var id = parseInt(opts.params.id) || opts.params.id
-    QuickRest.handlers.get(bookDB, req, res, id, function (err, data) {
+    RestParser.handlers.get(bookDB, req, res, id, function (err, data) {
       res.end(JSON.stringify(data))
     })
   }),
@@ -137,7 +137,7 @@ router.addRoute({
       return
     }
 
-    QuickRest.handlers.post(bookDB, req, res, id, function (err, data) {
+    RestParser.handlers.post(bookDB, req, res, id, function (err, data) {
       res.end(JSON.stringify(data))
     })
   })
@@ -149,20 +149,20 @@ server.listen(8000)
 
 # API
 
-#### QuickRest#dispatch(model, req, res, id, cb)
+#### RestParser#dispatch(model, req, res, id, cb)
 This uses the ```req.method``` to dispatch appropriately to one of the following methods.
 
-#### QuickRest#handlers.get(model, req, res, id, cb)
+#### RestParser#handlers.get(model, req, res, id, cb)
 
-#### QuickRest#handlers.post(model, req, res, cb)
+#### RestParser#handlers.post(model, req, res, cb)
 Parses the request body using ```getBodyData``` and passes it to the underlying ```model.post``` method. Does *not* take an id -- it is assumed that the id will be generated upon creation or otherwise will be handled by the model.
 
-#### QuickRest#handlers.put(model, req, res, id, cb)
+#### RestParser#handlers.put(model, req, res, id, cb)
 Parses the request body using ```getBodyData``` and passes it to the underlying ```model.put``` method
 
-#### QuickRest#handlers.delete(model, req, res, id, cb)
+#### RestParser#handlers.delete(model, req, res, id, cb)
 
-#### QuickRest#getBodyData
+#### RestParser#getBodyData
 Parses the request body using ```jsonBody```
 
 

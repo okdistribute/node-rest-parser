@@ -1,7 +1,7 @@
 var http = require('http');
 var Router = require('routes-router');
 
-var QuickRestModel = require('..')
+var RestParser = require('..')
 var createModels = require('./models');
 
 function Server () {
@@ -15,7 +15,7 @@ function Server () {
     if (!model) {
       return cb(new Error('no model'))
     }
-    QuickRestModel.dispatch(model, req, res, id, function (err, data) {
+    RestParser.dispatch(model, req, res, id, function (err, data) {
       if (err) {
         console.error(err)
         res.statusCode = 500;
