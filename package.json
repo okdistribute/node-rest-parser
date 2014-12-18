@@ -1,6 +1,6 @@
 {
   "name": "rest-parser",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "an easy plug-n-play REST wrapper for any ORM",
   "main": "index.js",
   "directories": {
