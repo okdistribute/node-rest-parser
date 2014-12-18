@@ -7,6 +7,9 @@ A request parser that enforces REST style for any db model. Simply implement the
 
 [![build status](https://secure.travis-ci.org/karissa/node-rest-parser.png)](http://travis-ci.org/karissa/node-rest-parser)
 
+# Why?
+
+We want to separate the request and authentication handlers from the database model code. This makes it easy to change backends without having to change your http routes. It's also great for exposing the same API over http for all of your database models without extra code.
 
 # Installation
 This module is installed via npm:
@@ -76,12 +79,12 @@ var Book = require('./book.js')
 
 // make the book model
 var bookDB = new Book()
-var parser = new RestParser(bookDB)
+var REST = new RestParser(bookDB)
 
 // Wire up API endpoints
 router.addRoute('/api/book/:id?', function(req, res, opts) {
     var id = parseInt(opts.params.id) || opts.params.id
-    parser.dispatch(req, { id: id }, function (err, data) {
+    REST.dispatch(req, { id: id }, function (err, data) {
       res.end(JSON.stringify(data))
     })
   })
@@ -113,13 +116,13 @@ var Book = require('./book.js')
 
 // make the book model
 var bookDB = new Book()
-var parser = new RestParser(book)
+var REST = new RestParser(book)
 
 // Wire up API endpoints
 router.addRoute({
   GET: '/api/book/:id', function(req, res, opts) {
     var id = parseInt(opts.params.id) || opts.params.id
-    parser.get(req, { id: id }, function (err, data) {
+    REST.get(req, { id: id }, function (err, data) {
       res.end(JSON.stringify(data))
     })
   }),
@@ -131,7 +134,7 @@ router.addRoute({
       return
     }
 
-    parser.post(req, { id: id }, function (err, data) {
+    REST.post(req, { id: id }, function (err, data) {
       res.end(JSON.stringify(data))
     })
   })
