@@ -1,4 +1,5 @@
-var jsonBody = require('body/json')
+var concat = require('concat-stream')
+
 var url = require('url')
 var debug = require('debug')('restful');
 
@@ -28,16 +29,29 @@ RestParser.prototype.dispatch = function (req, opts, cb) {
   }
 }
 
+function concatJSON(cb) {
+  return concat(function getJSON(buff) {
+    var err, data
+    try {
+      data = JSON.parse(buff)
+    } catch(e) {
+      err = e
+    }
+    cb(err, data)
+  })
+}
+
 RestParser.prototype.getBodyData = function (req, cb) {
   var self = this;
   var data = {};
-  jsonBody(req, function (err, data) {
+
+  req.pipe(concatJSON(function (err, data) {
     if (err || !data) {
       return cb(err);
     }
     debug('request data\n', data);
     cb(null, data);
-  });
+  }));
 }
 
 RestParser.prototype.post = function (req, opts, cb) {

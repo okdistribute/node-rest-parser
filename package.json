@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/karissa/node-rest-parser",
   "dependencies": {
-    "body": "^4.5.0",
+    "concat-stream": "^1.4.7",
     "debug": "^2.1.0"
   },
   "devDependencies": {
