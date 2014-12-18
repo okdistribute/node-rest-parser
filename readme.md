@@ -151,10 +151,11 @@ server.listen(8000)
 Instantiates the parser with a given model.
 
 The model object should have the following method signature:
-model#put(data, opts, cb)
-model#post(data, opts, cb)
-model#delete(opts, cb)
-model#get(opts, cb)
+
+* model#put(data, opts, cb)
+* model#post(data, opts, cb)
+* model#delete(opts, cb)
+* model#get(opts, cb)
 
 The parser will take the request object and route to the corresponding model method.
 
