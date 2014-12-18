@@ -1,7 +1,7 @@
 rest-parser
 =============
 
-A simple requset parser that enforces REST style for any backend. Simply implement the required methods for the underlying database model. The model needs implement the methods `.post`, `.get`, `.put`, and `.delete`.
+A request parser that enforces REST style for any db model. Simply implement the required methods for the underlying object. The model object only needs to implement the methods `.post`, `.get`, `.put`, and `.delete`.
 
 [![NPM](https://nodei.co/npm/rest-parser.png?compact=true)](https://nodei.co/npm/rest-parser/)
 
@@ -20,54 +20,50 @@ $ npm install rest-parser
 Example database connection object that uses simple in-memory dictionaries for application storage.
 
 ```js
-function Book() {
-  this.currentKey = 0
+function Book(key) {
   this.db = {}
+  this.key = key
 }
 
-Book.prototype.post = function (model, cb) {
-  if(!model) {
+Book.prototype.post = function (data, opts, cb) {
+  if(!data) {
     return cb('Need values to save')
   }
-  var key = this.currentKey += 1
-  this.db[key] = model
-  this.currentKey = key
+  var key = data[this.key]
+  this.db[key] = data
   return cb(null, key)
 }
 
-Book.prototype.get = function (key, cb){
-  if(!key) {
-    return cb('Need a key')
+Book.prototype.get = function (opts, cb){
+  if(!opts.id) {
+    var values = []
+    for (id in this.db) {
+      values.push(this.db[id])
+    }
+    return cb(null, values)
   }
-  var val = this.db[key]
+  var val = this.db[opts.id]
   if (!val) {
     return cb('NotFound')
   }
-  return cb(null, this.db[key])
+  return cb(null, this.db[opts.id])
 }
 
-Book.prototype.put = function (key, model, cb) {
-  if(!key) {
-    return cb('Need a key')
+Book.prototype.put = function (data, opts, cb) {
+  if(!opts.id) {
+    return cb('Need a opts.id')
   }
-  this.db[key] = model
-  return cb(null, key)
+  this.db[opts.id] = data
+  return cb(null, opts.id)
 }
 
-Book.prototype.delete = function (key, cb) {
-  if(!key) {
-    return cb('Need a key')
+
+Book.prototype.delete = function (opts, cb) {
+  if(!opts.id) {
+    return cb('Need a opts.id')
   }
-  delete this.db[key]
+  delete this.db[opts.id]
   return cb(null)
-}
-
-Book.prototype.all = function (cb) {
-  var values = []
-  for (key in this.db) {
-    values.push(this.db[key])
-  }
-  return cb(null, values)
 }
 
 ```
