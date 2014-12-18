@@ -1,53 +1,37 @@
-var jsonBody = require('body/json');
+var jsonBody = require('body/json')
 var url = require('url')
 var debug = require('debug')('restful');
 
-var RestParser = {}
+var RestParser = function (model) {
+  this.model = model
+}
 
-/*
-Parameters
-------
-model : object
-the model object should have the following method signature:
-.put(id, data, function (err, data))
- -- data to be updated by id
-.get(id, function (err, data))
-.query(params, function (err, data))
- -- params a dictionary of field: value for filtering the db
- -- returns all matching rows
-.all(function (err, data))
- -- returns all data
-.post(data, function (err, data))
- -- data is the post parameters in the request
- -- returns the given row with id value
-*/
-
-RestParser.dispatch = function (model, req, res, id, cb) {
+RestParser.prototype.dispatch = function (req, opts, cb) {
   var self = this
   var method = req.method.toLowerCase();
   switch (method) {
     case 'post':
-      RestParser.handlers.post(model, req, res, cb);
+      self.post(req, opts, cb);
       break;
     case 'get':
-      RestParser.handlers.get(model, req, res, id, cb);
+      self.get(req, opts, cb);
       break;
     case 'put':
-      RestParser.handlers.put(model, req, res, id, cb);
+      self.put(req, opts, cb);
       break;
     case 'delete':
-      RestParser.handlers.delete(model, req, res, id, cb);
+      self.delete(req, opts, cb);
       break;
     default:
-      cb('method must be one of post put get or delete')
+      cb(new Error('method must be one of post put get or delete'))
       break;
   }
 }
 
-RestParser.getBodyData = function (req, res, cb) {
+RestParser.prototype.getBodyData = function (req, cb) {
   var self = this;
   var data = {};
-  jsonBody(req, res, function (err, data) {
+  jsonBody(req, function (err, data) {
     if (err || !data) {
       return cb(err);
     }
@@ -56,58 +40,39 @@ RestParser.getBodyData = function (req, res, cb) {
   });
 }
 
-RestParser.handlers = {};
-
-RestParser.handlers.post = function (model, req, res, cb) {
+RestParser.prototype.post = function (req, opts, cb) {
   var self = this;
-  RestParser.getBodyData(req, res, function(err, data) {
+  self.getBodyData(req, function(err, data) {
     if (err || !data) {
       return cb(err)
     }
     debug('posting ', data);
-    model.post(data, cb);
+    self.model.post(data, opts, cb);
   });
 };
 
-RestParser.handlers.put = function (model, req, res, id, cb) {
+RestParser.prototype.put = function (req, opts, cb) {
   var self = this;
-  if (!id) return cb('need an id to put', false);
-  RestParser.getBodyData(req, res, function (err, data) {
+  if (!opts.id) return cb(new Error('need an id to put'), false);
+  self.getBodyData(req, function (err, data) {
     if (err || !data) {
       return cb(err)
     }
-    debug('putting ', id, data);
-    model.put(id, data, cb);
+    debug('putting ', opts, data);
+    self.model.put(data, opts, cb);
   });
 };
 
-RestParser.handlers.delete = function (model, req, res, id, cb) {
+RestParser.prototype.delete = function (req, opts, cb) {
   var self = this
-  if (!id) return cb('need an id to delete', false);
-  debug('deleting ', id);
-  model.delete(id, cb);
+  if (!opts.id) return cb(new Error('need an id to delete'), false);
+  debug('deleting ', opts.id);
+  self.model.delete(opts, cb);
 };
 
-RestParser.handlers.get = function (model, req, res, id, cb) {
-  // cb = function (err, data)
+RestParser.prototype.get = function (req, opts, cb) {
   var self = this
-  if (!id) {
-    // get by url query parameters
-    var qs = url.parse(req.url, true).query
-
-    if (Object.keys(qs).length > 0) {
-      debug('looking up qs', qs)
-      model.query(qs, cb);
-    }
-    else {
-      debug('returning all values')
-      model.all(cb);
-    }
-  }
-  else {
-    debug('getting by id', id)
-    model.get(id, cb);
-  }
+  self.model.get(opts, cb);
 };
 
 

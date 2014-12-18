@@ -15,7 +15,8 @@ function Server () {
     if (!model) {
       return cb(new Error('no model'))
     }
-    RestParser.dispatch(model, req, res, id, function (err, data) {
+    var parser = new RestParser(model);
+    parser.dispatch(req, {id: id}, function (err, data) {
       if (err) {
         console.error(err)
         res.statusCode = 500;

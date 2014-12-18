@@ -13,47 +13,43 @@ function Simple(key) {
   this.key = key
 }
 
-Simple.prototype.post = function (model, cb) {
-  if(!model) {
+Simple.prototype.post = function (data, opts, cb) {
+  if(!data) {
     return cb('Need values to save')
   }
-  var key = model[this.key]
-  this.db[key] = model
+  var key = data[this.key]
+  this.db[key] = data
   return cb(null, key)
 }
 
-Simple.prototype.get = function (key, cb){
-  if(!key) {
-    return cb('Need a key')
+Simple.prototype.get = function (opts, cb){
+  if(!opts.id) {
+    var values = []
+    for (id in this.db) {
+      values.push(this.db[id])
+    }
+    return cb(null, values)
   }
-  var val = this.db[key]
+  var val = this.db[opts.id]
   if (!val) {
     return cb('NotFound')
   }
-  return cb(null, this.db[key])
+  return cb(null, this.db[opts.id])
 }
 
-Simple.prototype.put = function (key, model, cb) {
-  if(!key) {
-    return cb('Need a key')
+Simple.prototype.put = function (data, opts, cb) {
+  if(!opts.id) {
+    return cb('Need a opts.id')
   }
-  this.db[key] = model
-  return cb(null, key)
+  this.db[opts.id] = data
+  return cb(null, opts.id)
 }
 
 
-Simple.prototype.delete = function (key, cb) {
-  if(!key) {
-    return cb('Need a key')
+Simple.prototype.delete = function (opts, cb) {
+  if(!opts.id) {
+    return cb('Need a opts.id')
   }
-  delete this.db[key]
+  delete this.db[opts.id]
   return cb(null)
-}
-
-Simple.prototype.all = function (cb) {
-  var values = []
-  for (key in this.db) {
-    values.push(this.db[key])
-  }
-  return cb(null, values)
 }

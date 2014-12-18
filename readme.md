@@ -118,12 +118,13 @@ var Book = require('./book.js')
 
 // make the book model
 var bookDB = new Book()
+var parser = new RestParser(book)
 
 // Wire up API endpoints
 router.addRoute({
   GET: '/api/book/:id', function(req, res, opts) {
     var id = parseInt(opts.params.id) || opts.params.id
-    RestParser.handlers.get(bookDB, req, res, id, function (err, data) {
+    parser.get(req, { id: id }, function (err, data) {
       res.end(JSON.stringify(data))
     })
   }),
@@ -135,7 +136,7 @@ router.addRoute({
       return
     }
 
-    RestParser.handlers.post(bookDB, req, res, id, function (err, data) {
+    parser.post(req, { id: id }, function (err, data) {
       res.end(JSON.stringify(data))
     })
   })
@@ -147,23 +148,32 @@ server.listen(8000)
 
 # API
 
-#### RestParser#dispatch(model, req, res, id, cb)
-This uses the ```req.method``` to dispatch appropriately to one of the following methods.
+#### RestParser(model)
+Instantiates the parser with a given model. The model needs to
 
-#### RestParser#handlers.get(model, req, res, id, cb)
+The model object should have the following method signature:
+model#put(data, opts, cb)
+model#post(data, opts, cb)
+model#delete(opts, cb)
+model#get(opts, cb)
 
-#### RestParser#handlers.post(model, req, res, cb)
-Parses the request body using ```getBodyData``` and passes it to the underlying ```model.post``` method. Does *not* take an id -- it is assumed that the id will be generated upon creation or otherwise will be handled by the model.
-
-#### RestParser#handlers.put(model, req, res, id, cb)
-Parses the request body using ```getBodyData``` and passes it to the underlying ```model.put``` method
-
-#### RestParser#handlers.delete(model, req, res, id, cb)
-
-#### RestParser#getBodyData
-Parses the request body using ```jsonBody```
+The parser will take the request object and route to the corresponding model method.
 
 
+#### RestParser#post(req, opts, cb)
+Does *not* enforce an id -- it is assumed that the id will be generated upon creation or otherwise will be handled by the model.
+
+#### RestParser#put(req, opts, cb)
+Parses the request body using ```getBodyData``` and passes to ```model.put```.
+
+#### RestParser#delete(req, opts, cb)
+Passes to `model.delete`.
+
+#### RestParser#get(req, opts, cb)
+Passes to `model.get`
+
+#### RestParser#dispatch(req, opts, cb)
+This parses the ```req.method``` to dispatch appropriately to one of the above methods.
 
 # Examples
 
