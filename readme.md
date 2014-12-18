@@ -1,21 +1,11 @@
 rest-parser
 =============
 
-A simple requset parser that enforces REST style for any backend. Simply implement the required methods for the underlying database model.
+A simple requset parser that enforces REST style for any backend. Simply implement the required methods for the underlying database model. The model needs implement the methods `.post`, `.get`, `.put`, and `.delete`.
 
 [![NPM](https://nodei.co/npm/rest-parser.png?compact=true)](https://nodei.co/npm/rest-parser/)
 
 [![build status](https://secure.travis-ci.org/karissa/node-rest-parser.png)](http://travis-ci.org/karissa/node-rest-parser)
-
-This makes it easy to dispatch a given request to a particular undelying model. Any of the following routes implemented according to [this spec](http://www.restapitutorial.com/lessons/httpmethods.html) will be made available:
-
-```
-GET /model
-GET /model/id
-POST /model
-PUT /model/id
-DELETE /model/id
-```
 
 
 # Installation
@@ -27,33 +17,7 @@ $ npm install rest-parser
 
 # Usage
 
-You need to create an object (ORM) that has the methods ```.post```, ```.get```, ```.put```, ```.delete```, and ```.all```
-
-## Create a server
-
-Assuming Book fully implements this API, you can see how we dispatch requests automatically using ```rest-parser```.
-
-```js
-var RestParser = require('rest-parser')
-var Book = require('./book.js')
-
-// make the book model
-var bookDB = new Book()
-
-// Wire up API endpoints
-router.addRoute('/api/book/:id?', function(req, res, opts) {
-    var id = parseInt(opts.params.id) || opts.params.id
-    RestParser.dispatch(bookDB, req, res, id, function (err, data) {
-      res.end(JSON.stringify(data))
-    })
-  })
-})
-
-var server = http.createServer(router)
-server.listen(8000)
-```
-
-Example ORM object that uses simple in-memory dictionaries for application storage.
+Example database connection object that uses simple in-memory dictionaries for application storage.
 
 ```js
 function Book() {
@@ -108,6 +72,41 @@ Book.prototype.all = function (cb) {
 
 ```
 
+## Create a server
+
+```js
+var RestParser = require('rest-parser')
+var Book = require('./book.js')
+
+// make the book model
+var bookDB = new Book()
+var parser = new RestParser(bookDB)
+
+// Wire up API endpoints
+router.addRoute('/api/book/:id?', function(req, res, opts) {
+    var id = parseInt(opts.params.id) || opts.params.id
+    parser.dispatch(req, { id: id }, function (err, data) {
+      res.end(JSON.stringify(data))
+    })
+  })
+})
+
+var server = http.createServer(router)
+server.listen(8000)
+```
+
+
+The server will now have these routes available:
+
+```
+GET /book
+GET /book/:id
+POST /book
+PUT /book/:id
+DELETE /book/:id
+```
+
+
 # Advanced: auth, custom routes
 
 Sometimes, you want control over the individual routes to expose only a subset, to require authentication, or some other query logic. It's easy to do with rest-parser -- just use the underlying handler methods:
@@ -149,7 +148,7 @@ server.listen(8000)
 # API
 
 #### RestParser(model)
-Instantiates the parser with a given model. The model needs to
+Instantiates the parser with a given model.
 
 The model object should have the following method signature:
 model#put(data, opts, cb)
