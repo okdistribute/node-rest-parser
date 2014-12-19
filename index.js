@@ -4,6 +4,7 @@ var url = require('url')
 var debug = require('debug')('restful');
 
 var RestParser = function (model) {
+  if (!(this instanceof RestParser)) return new RestParser(model)
   this.model = model
 }
 
